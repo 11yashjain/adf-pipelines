@@ -15,6 +15,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'BlobStorageProducts'"
 		},
+		"CustomerDatabase_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'CustomerDatabase'"
+		},
+		"CustomerBlobStorage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'CustomerBlobStorage'"
+		},
 		"AdvWorksDb_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "yashj.database.windows.net"
@@ -24,6 +32,18 @@
 			"defaultValue": "Defaultdb"
 		},
 		"AdvWorksDb_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "yash"
+		},
+		"CustomerDatabase_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "yashj.database.windows.net"
+		},
+		"CustomerDatabase_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "Defaultdb"
+		},
+		"CustomerDatabase_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "yash"
 		},
@@ -60,6 +80,12 @@
 					"BlobStorageProducts_connectionString": {
 						"value": "[parameters('BlobStorageProducts_connectionString')]"
 					},
+					"CustomerDatabase_password": {
+						"value": "[parameters('CustomerDatabase_password')]"
+					},
+					"CustomerBlobStorage_connectionString": {
+						"value": "[parameters('CustomerBlobStorage_connectionString')]"
+					},
 					"AdvWorksDb_properties_typeProperties_server": {
 						"value": "[parameters('AdvWorksDb_properties_typeProperties_server')]"
 					},
@@ -68,6 +94,15 @@
 					},
 					"AdvWorksDb_properties_typeProperties_userName": {
 						"value": "[parameters('AdvWorksDb_properties_typeProperties_userName')]"
+					},
+					"CustomerDatabase_properties_typeProperties_server": {
+						"value": "[parameters('CustomerDatabase_properties_typeProperties_server')]"
+					},
+					"CustomerDatabase_properties_typeProperties_database": {
+						"value": "[parameters('CustomerDatabase_properties_typeProperties_database')]"
+					},
+					"CustomerDatabase_properties_typeProperties_userName": {
+						"value": "[parameters('CustomerDatabase_properties_typeProperties_userName')]"
 					}
 				}
 			},

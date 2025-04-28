@@ -11,6 +11,12 @@
 		"BlobStorageProducts_connectionString": {
 			"value": ""
 		},
+		"CustomerDatabase_password": {
+			"value": ""
+		},
+		"CustomerBlobStorage_connectionString": {
+			"value": ""
+		},
 		"AdvWorksDb_properties_typeProperties_server": {
 			"value": "yashj.database.windows.net"
 		},
@@ -18,6 +24,15 @@
 			"value": "Defaultdb"
 		},
 		"AdvWorksDb_properties_typeProperties_userName": {
+			"value": "yash"
+		},
+		"CustomerDatabase_properties_typeProperties_server": {
+			"value": "yashj.database.windows.net"
+		},
+		"CustomerDatabase_properties_typeProperties_database": {
+			"value": "Defaultdb"
+		},
+		"CustomerDatabase_properties_typeProperties_userName": {
 			"value": "yash"
 		}
 	}
