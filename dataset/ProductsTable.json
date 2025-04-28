@@ -1,0 +1,12 @@
+{
+	"name": "ProductsTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AdvWorksDb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
