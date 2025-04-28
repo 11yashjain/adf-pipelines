@@ -4,6 +4,21 @@
 	"parameters": {
 		"factoryName": {
 			"value": "adf-yash-capg1212"
+		},
+		"AdvWorksDb_password": {
+			"value": ""
+		},
+		"BlobStorageProducts_connectionString": {
+			"value": ""
+		},
+		"AdvWorksDb_properties_typeProperties_server": {
+			"value": "yashj.database.windows.net"
+		},
+		"AdvWorksDb_properties_typeProperties_database": {
+			"value": "Defaultdb"
+		},
+		"AdvWorksDb_properties_typeProperties_userName": {
+			"value": "yash"
 		}
 	}
 }
