@@ -11,10 +11,10 @@
 		"BlobStorageProducts_connectionString": {
 			"value": ""
 		},
-		"CustomerDatabase_password": {
+		"CustomerBlobStorage_connectionString": {
 			"value": ""
 		},
-		"CustomerBlobStorage_connectionString": {
+		"CustomerDatabase_password": {
 			"value": ""
 		},
 		"AdvWorksDb_properties_typeProperties_server": {
