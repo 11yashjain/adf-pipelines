@@ -5,7 +5,16 @@
 		"factoryName": {
 			"value": "adf-yash-capg1212"
 		},
+		"ADLSGen2_accountKey": {
+			"value": ""
+		},
+		"ADLSTripData_accountKey": {
+			"value": ""
+		},
 		"AdvWorksDb_password": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
 		"BlobStorageProducts_connectionString": {
@@ -17,6 +26,15 @@
 		"CustomerDatabase_password": {
 			"value": ""
 		},
+		"TaxiTripDb_password": {
+			"value": ""
+		},
+		"ADLSGen2_properties_typeProperties_url": {
+			"value": "https://sqlsa12.dfs.core.windows.net/"
+		},
+		"ADLSTripData_properties_typeProperties_url": {
+			"value": "https://adlstripdata1.dfs.core.windows.net/"
+		},
 		"AdvWorksDb_properties_typeProperties_server": {
 			"value": "yashj.database.windows.net"
 		},
@@ -26,6 +44,9 @@
 		"AdvWorksDb_properties_typeProperties_userName": {
 			"value": "yash"
 		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://sqlsa12.dfs.core.windows.net/"
+		},
 		"CustomerDatabase_properties_typeProperties_server": {
 			"value": "yashj.database.windows.net"
 		},
@@ -33,6 +54,15 @@
 			"value": "Defaultdb"
 		},
 		"CustomerDatabase_properties_typeProperties_userName": {
+			"value": "yash"
+		},
+		"TaxiTripDb_properties_typeProperties_server": {
+			"value": "yashj.database.windows.net"
+		},
+		"TaxiTripDb_properties_typeProperties_database": {
+			"value": "taxi-data"
+		},
+		"TaxiTripDb_properties_typeProperties_userName": {
 			"value": "yash"
 		},
 		"containerUri": {
