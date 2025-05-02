@@ -43,6 +43,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'tripAggregateBlob'"
 		},
+		"ADLSGen22_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ADLSGen22'"
+		},
 		"ADLSGen2_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://sqlsa12.dfs.core.windows.net/"
@@ -90,6 +94,10 @@
 		"TaxiTripDb_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "yash"
+		},
+		"ADLSGen22_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlstripdata1.dfs.core.windows.net/"
 		},
 		"containerUri": {
 			"type": "string",
@@ -145,6 +153,9 @@
 					"tripAggregateBlob_connectionString": {
 						"value": "[parameters('tripAggregateBlob_connectionString')]"
 					},
+					"ADLSGen22_accountKey": {
+						"value": "[parameters('ADLSGen22_accountKey')]"
+					},
 					"ADLSGen2_properties_typeProperties_url": {
 						"value": "[parameters('ADLSGen2_properties_typeProperties_url')]"
 					},
@@ -180,6 +191,9 @@
 					},
 					"TaxiTripDb_properties_typeProperties_userName": {
 						"value": "[parameters('TaxiTripDb_properties_typeProperties_userName')]"
+					},
+					"ADLSGen22_properties_typeProperties_url": {
+						"value": "[parameters('ADLSGen22_properties_typeProperties_url')]"
 					}
 				}
 			},

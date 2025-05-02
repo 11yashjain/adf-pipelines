@@ -32,6 +32,9 @@
 		"tripAggregateBlob_connectionString": {
 			"value": ""
 		},
+		"ADLSGen22_accountKey": {
+			"value": ""
+		},
 		"ADLSGen2_properties_typeProperties_url": {
 			"value": "https://sqlsa12.dfs.core.windows.net/"
 		},
@@ -67,6 +70,9 @@
 		},
 		"TaxiTripDb_properties_typeProperties_userName": {
 			"value": "yash"
+		},
+		"ADLSGen22_properties_typeProperties_url": {
+			"value": "https://adlstripdata1.dfs.core.windows.net/"
 		}
 	}
 }
