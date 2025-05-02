@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ADLSGen2'"
 		},
+		"ADLSGen22_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ADLSGen22'"
+		},
 		"ADLSTripData_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ADLSTripData'"
@@ -43,13 +47,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'tripAggregateBlob'"
 		},
-		"ADLSGen22_accountKey": {
+		"FlipkartBlobStorage_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ADLSGen22'"
+			"metadata": "Secure string for 'connectionString' of 'FlipkartBlobStorage'"
 		},
 		"ADLSGen2_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://sqlsa12.dfs.core.windows.net/"
+		},
+		"ADLSGen22_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlstripdata1.dfs.core.windows.net/"
 		},
 		"ADLSTripData_properties_typeProperties_url": {
 			"type": "string",
@@ -94,10 +102,6 @@
 		"TaxiTripDb_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "yash"
-		},
-		"ADLSGen22_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://adlstripdata1.dfs.core.windows.net/"
 		}
 	},
 	"variables": {
@@ -684,6 +688,52 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/TransformMovies')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "TransformMovies",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"MoviesDB": {},
+									"SinkMovies": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/TransformMovies')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -935,6 +985,87 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/MoviesDB')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ADLSGen22",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "moviesDB.csv",
+						"fileSystem": "sample-data"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "movie",
+						"type": "String"
+					},
+					{
+						"name": "title",
+						"type": "String"
+					},
+					{
+						"name": "genres",
+						"type": "String"
+					},
+					{
+						"name": "year",
+						"type": "String"
+					},
+					{
+						"name": "Rating",
+						"type": "String"
+					},
+					{
+						"name": "Rotton Tomato",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ADLSGen22')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MoviesSink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ADLSGen22",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "output",
+						"fileSystem": "sample-data"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ADLSGen22')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ProductCsvBlob')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -978,6 +1109,34 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AdvWorksDb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TripAggregateCsv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "tripAggregateBlob",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "TripAggregations.csv",
+						"container": "tripdata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/tripAggregateBlob')]"
 			]
 		},
 		{
@@ -1098,6 +1257,23 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('ADLSGen2_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADLSGen22')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ADLSGen22_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ADLSGen22_accountKey')]"
 					}
 				}
 			},
@@ -1228,6 +1404,82 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tripAggregateBlob')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('tripAggregateBlob_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TransformMovies')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "MoviesDB",
+								"type": "DatasetReference"
+							},
+							"name": "MoviesDB"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "MoviesSink",
+								"type": "DatasetReference"
+							},
+							"name": "SinkMovies"
+						}
+					],
+					"transformations": [
+						{
+							"name": "FilterYears"
+						},
+						{
+							"name": "AggregateComedyRatings"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          movie as string,",
+						"          title as string,",
+						"          genres as string,",
+						"          year as string,",
+						"          Rating as string,",
+						"          {Rotton Tomato} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> MoviesDB",
+						"MoviesDB filter(toInteger(year) >= 1910 && toInteger(year) <= 2000 && rlike(genres, 'Comedy')) ~> FilterYears",
+						"FilterYears aggregate(groupBy(year),",
+						"     AverageComedyRating = avg(toInteger(Rating))) ~> AggregateComedyRatings",
+						"AggregateComedyRatings sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SinkMovies"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/MoviesDB')]",
+				"[concat(variables('factoryId'), '/datasets/MoviesSink')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/dbProductMarkup')]",
@@ -1415,48 +1667,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/tripAggregateBlob')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('tripAggregateBlob_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TripAggregateCsv')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "tripAggregateBlob",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "TripAggregations.csv",
-						"container": "tripdata"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/tripAggregateBlob')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TransformMovies')]",
+			"name": "[concat(parameters('factoryName'), '/Assignmnet_csv_to_parquet')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1475,12 +1686,12 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "TransformMovies",
+								"referenceName": "dataflow1",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"MoviesDB": {},
-									"SinkMovies": {}
+									"flipkartdb": {},
+									"Sink": {}
 								}
 							},
 							"staging": {},
@@ -1498,11 +1709,24 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/TransformMovies')]"
+				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/TransformMovies')]",
+			"name": "[concat(parameters('factoryName'), '/FlipkartBlobStorage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('FlipkartBlobStorage_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1511,92 +1735,81 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "MoviesDB",
+								"referenceName": "FlipkartDatasetCSV",
 								"type": "DatasetReference"
 							},
-							"name": "MoviesDB"
+							"name": "flipkartdb"
 						}
 					],
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "MoviesSink",
+								"referenceName": "Flipkart_Parquet",
 								"type": "DatasetReference"
 							},
-							"name": "SinkMovies"
+							"name": "Sink"
 						}
 					],
 					"transformations": [
 						{
-							"name": "FilterYears"
+							"name": "filterproducts"
 						},
 						{
-							"name": "AggregateComedyRatings"
+							"name": "derivedColumn"
 						}
 					],
 					"scriptLines": [
 						"source(output(",
-						"          movie as string,",
+						"          id as string,",
 						"          title as string,",
-						"          genres as string,",
-						"          year as string,",
 						"          Rating as string,",
-						"          {Rotton Tomato} as string",
+						"          maincateg as string,",
+						"          platform as string,",
+						"          actprice1 as string,",
+						"          norating1 as string,",
+						"          noreviews1 as string,",
+						"          star_5f as string,",
+						"          star_4f as string,",
+						"          star_3f as string,",
+						"          star_2f as string,",
+						"          star_1f as string,",
+						"          fulfilled1 as string",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> MoviesDB",
-						"MoviesDB filter(toInteger(year) >= 1910 && toInteger(year) <= 2000 && rlike(genres, 'Comedy')) ~> FilterYears",
-						"FilterYears aggregate(groupBy(year),",
-						"     AverageComedyRating = avg(toInteger(Rating))) ~> AggregateComedyRatings",
-						"AggregateComedyRatings sink(allowSchemaDrift: true,",
+						"     ignoreNoFilesFound: false) ~> flipkartdb",
+						"flipkartdb filter(toInteger(norating1)<10 || toInteger(noreviews1)<10) ~> filterproducts",
+						"filterproducts derive(positive_review_ratio = toInteger(star_5f)/toInteger(norating1),",
+						"          total_stars = toDouble(star_1f) + toDouble(star_2f) + toDouble(star_3f) + toDouble(star_4f) + toDouble(star_5f)) ~> derivedColumn",
+						"derivedColumn sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     umask: 0022,",
-						"     preCommands: [],",
-						"     postCommands: [],",
+						"     format: 'parquet',",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SinkMovies"
+						"     skipDuplicateMapOutputs: true) ~> Sink"
 					]
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/MoviesDB')]",
-				"[concat(variables('factoryId'), '/datasets/MoviesSink')]"
+				"[concat(variables('factoryId'), '/datasets/FlipkartDatasetCSV')]",
+				"[concat(variables('factoryId'), '/datasets/Flipkart_Parquet')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ADLSGen22')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('ADLSGen22_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('ADLSGen22_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/MoviesDB')]",
+			"name": "[concat(parameters('factoryName'), '/FlipkartDatasetCSV')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "ADLSGen22",
+					"referenceName": "FlipkartBlobStorage",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "moviesDB.csv",
-						"fileSystem": "sample-data"
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Flipkart.csv",
+						"container": "flipkart-data"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -1605,7 +1818,7 @@
 				},
 				"schema": [
 					{
-						"name": "movie",
+						"name": "id",
 						"type": "String"
 					},
 					{
@@ -1613,53 +1826,81 @@
 						"type": "String"
 					},
 					{
-						"name": "genres",
-						"type": "String"
-					},
-					{
-						"name": "year",
-						"type": "String"
-					},
-					{
 						"name": "Rating",
 						"type": "String"
 					},
 					{
-						"name": "Rotton Tomato",
+						"name": "maincateg",
+						"type": "String"
+					},
+					{
+						"name": "platform",
+						"type": "String"
+					},
+					{
+						"name": "actprice1",
+						"type": "String"
+					},
+					{
+						"name": "norating1",
+						"type": "String"
+					},
+					{
+						"name": "noreviews1",
+						"type": "String"
+					},
+					{
+						"name": "star_5f",
+						"type": "String"
+					},
+					{
+						"name": "star_4f",
+						"type": "String"
+					},
+					{
+						"name": "star_3f",
+						"type": "String"
+					},
+					{
+						"name": "star_2f",
+						"type": "String"
+					},
+					{
+						"name": "star_1f",
+						"type": "String"
+					},
+					{
+						"name": "fulfilled1",
 						"type": "String"
 					}
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ADLSGen22')]"
+				"[concat(variables('factoryId'), '/linkedServices/FlipkartBlobStorage')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/MoviesSink')]",
+			"name": "[concat(parameters('factoryName'), '/Flipkart_Parquet')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "ADLSGen22",
+					"referenceName": "FlipkartBlobStorage",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "DelimitedText",
+				"type": "Parquet",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "output",
-						"fileSystem": "sample-data"
+						"type": "AzureBlobStorageLocation",
+						"container": "flipkart-data"
 					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
+					"compressionCodec": "snappy"
 				},
 				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ADLSGen22')]"
+				"[concat(variables('factoryId'), '/linkedServices/FlipkartBlobStorage')]"
 			]
 		}
 	]
