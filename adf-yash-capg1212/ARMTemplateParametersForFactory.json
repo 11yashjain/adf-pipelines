@@ -29,13 +29,16 @@
 		"CustomerDatabase_password": {
 			"value": ""
 		},
+		"FlipkartBlobStorage_connectionString": {
+			"value": ""
+		},
 		"TaxiTripDb_password": {
 			"value": ""
 		},
 		"tripAggregateBlob_connectionString": {
 			"value": ""
 		},
-		"FlipkartBlobStorage_connectionString": {
+		"LookupBlobStorage_connectionString": {
 			"value": ""
 		},
 		"ADLSGen2_properties_typeProperties_url": {

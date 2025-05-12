@@ -39,6 +39,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'CustomerDatabase'"
 		},
+		"FlipkartBlobStorage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'FlipkartBlobStorage'"
+		},
 		"TaxiTripDb_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'TaxiTripDb'"
@@ -47,9 +51,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'tripAggregateBlob'"
 		},
-		"FlipkartBlobStorage_connectionString": {
+		"LookupBlobStorage_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'FlipkartBlobStorage'"
+			"metadata": "Secure string for 'connectionString' of 'LookupBlobStorage'"
 		},
 		"ADLSGen2_properties_typeProperties_url": {
 			"type": "string",
@@ -154,14 +158,17 @@
 					"CustomerDatabase_password": {
 						"value": "[parameters('CustomerDatabase_password')]"
 					},
+					"FlipkartBlobStorage_connectionString": {
+						"value": "[parameters('FlipkartBlobStorage_connectionString')]"
+					},
 					"TaxiTripDb_password": {
 						"value": "[parameters('TaxiTripDb_password')]"
 					},
 					"tripAggregateBlob_connectionString": {
 						"value": "[parameters('tripAggregateBlob_connectionString')]"
 					},
-					"FlipkartBlobStorage_connectionString": {
-						"value": "[parameters('FlipkartBlobStorage_connectionString')]"
+					"LookupBlobStorage_connectionString": {
+						"value": "[parameters('LookupBlobStorage_connectionString')]"
 					},
 					"ADLSGen2_properties_typeProperties_url": {
 						"value": "[parameters('ADLSGen2_properties_typeProperties_url')]"
@@ -224,6 +231,26 @@
 			},
 			"dependsOn": [
 				"[resourceId('Microsoft.Resources/deployments', 'adf-yash-capg1212_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "adf-yash-capg1212_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-yash-capg1212_ArmTemplate_1')]"
 			]
 		}
 	]
